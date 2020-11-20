@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title> GO训练营首期提问 </title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        #showquestion{
+            position: absolute;
+            left: 150px;
+            margin-left: 20px;
+            top: 1px;
+        }
+    </style>
+</head>
+<body style="margin-left: 20px;width: 90%">
+
+<hr>
+    <p class="active-tab" style="margin-left: 20px">
+        <strong> 请大家不要搞事情 ， 因为没有做任何的防护 </strong>
+    </p>
+<hr>
+<ul id="myTab" class="nav nav-tabs">
+    <li class="active"><a href="#home" data-toggle="tab"> 问题 </a></li>
+    <li><a href="#ios" data-toggle="tab">提问</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade in active" id="home">
+        <form role="form">
+            <div class="form-group" style="width: 140px;position: relative;margin-top: 10px">
+                <select class="form-control" id="showclass">
+                    <option value="1"> GO - 第一节课 </option>
+                    <option value="2"> GO - 第二节课</option>
+                    <option value="3"> GO - 第三节课</option>
+                    <option value="4"> GO - 第四节课</option>
+                    <option value="5"> GO - 第五节课</option>
+                    <option value="6"> GO - 第六节课</option>
+                    <option value="7"> GO - 第七节课</option>
+                    <option value="8"> GO - 第八节课</option>
+                    <option value="9"> GO - 第九节课</option>
+                </select>
+                <button id="showquestion" type="button" class="btn btn-default">查看问题</button>
+            </div>
+        </form>
+        <table class="table" style="margin-top: 10px">
+            <tbody id="addquestion"></tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="ios">
+        <form role="form">
+            <div class="form-group" style="width: 140px;margin-top: 10px">
+                <label for="name">选择列表</label>
+                <select class="form-control" id="putclas">
+                    <option value="1"> GO - 第一节课 </option>
+                    <option value="2"> GO - 第二节课</option>
+                    <option value="3"> GO - 第三节课</option>
+                    <option value="4"> GO - 第四节课</option>
+                    <option value="5"> GO - 第五节课</option>
+                    <option value="6"> GO - 第六节课</option>
+                    <option value="7"> GO - 第七节课</option>
+                    <option value="8"> GO - 第八节课</option>
+                    <option value="9"> GO - 第九节课</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="name">文本框</label>
+                <textarea id="puttext" class="form-control" rows="3"></textarea>
+            </div>
+
+            <button id="putsubmit" type="button" class="btn btn-primary">提交问题</button>
+        </form>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            // 获取已激活的标签页的名称
+            var activeTab = $(e.target).text();
+            // 获取前一个激活的标签页的名称
+            var previousTab = $(e.relatedTarget).text();
+            $(".active-tab span").html(activeTab);
+            $(".previous-tab span").html(previousTab);
+        });
+
+        $('#showquestion').on('click',function () {
+            var cls = $('#showclass option:selected').val();
+            $.get('/listQuestion?class='+cls,function (res) {
+                var data = JSON.parse(res.data);
+                if ( res.code == 200 ) {
+                    var html = ""
+                    for ( v in data) {
+                        html +=  '<tr> <td>'+data[v].question+'</td> </tr>'
+                    }
+                    $('#addquestion').html(html)
+                }
+            })
+        });
+
+        $('#putsubmit').on('click',function () {
+            var cls = $('#putclas option:selected').val();
+            var que = $('#puttext').val();
+            var data = { c : cls ,  q : que }
+            $.post('/createQuestion',data , function (res) {
+                if ( res.code == 200 ) {
+                    $('#puttext').val("");
+                    $('#showquestion').trigger("click")
+                    alert("添加成功")
+                } else {
+                    alert("添加失败")
+                }
+            })
+        });
+    });
+</script>
+
+
+</body>
+</html>
