@@ -14,9 +14,9 @@ func Setup() {
 	var connectString = fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		"root",
-		"123456",
+		"root",
 		"127.0.0.1:3306",
-		"cardsystem",
+		"question",
 	)
 	DB, err = gorm.Open("mysql", connectString)
 	if err != nil {

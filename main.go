@@ -15,5 +15,5 @@ func main() {
 		http.HandleFunc("/listQuestion" , service.List )
 		http.HandleFunc("/" , service.Show)
 	}()
-	log.Fatal(http.ListenAndServe("127.0.0.1:8889" , nil))
+	log.Fatal(http.ListenAndServe(":88" , nil))
 }
