@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	jsoniter "github.com/json-iterator/go"
+	"html"
 	"net/http"
 	"question/models"
 	"strconv"
@@ -76,8 +77,9 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+
 	Q := models.Question{
-		Question: strconv.Quote(sQuestion),
+		Question: html.EscapeString(sQuestion),
 		Class:    iClass,
 		Type:     1,
 	}
